@@ -1,29 +1,25 @@
-import { ref, computed } from "vue"
-
-type UserRole = "resident" | "curator" | null
+import { computed } from "vue"
+import { useAuthStore } from "@/stores/authStore"
 
 export function useRoles() {
-  const role = ref<UserRole>(null)
+  const authStore = useAuthStore()
 
-  function setRole(newRole: UserRole) {
-    role.value = newRole
-  }
+  const role = computed(() => authStore.user?.role ?? null)
 
-  function hasRole(required: UserRole | UserRole[]): boolean {
+  const isResident = computed(() => role.value?.toLowerCase() === "resident")
+  const isCurator = computed(() => role.value?.toLowerCase() === "curator")
+
+  function hasRole(required: string | string[]): boolean {
     if (!role.value) return false
     return Array.isArray(required)
-      ? required.includes(role.value)
-      : role.value === required
+      ? required.includes(role.value.toLowerCase())
+      : role.value.toLowerCase() === required.toLowerCase()
   }
-
-  const isResident = computed(() => role.value === "resident")
-  const isCurator = computed(() => role.value === "curator")
 
   return {
     role,
-    setRole,
-    hasRole,
     isResident,
     isCurator,
+    hasRole,
   }
 }

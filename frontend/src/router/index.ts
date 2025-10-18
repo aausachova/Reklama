@@ -14,6 +14,8 @@ import EventDetailsPage from "@/pages/events/[id].vue";
 import VacansyPage from "@/pages/VacansyPage.vue";
 import VacansyCreatePage from "@/pages/VacansyCreatePage.vue";
 import CandidatesPage from "@/pages/CandidatesPage.vue";
+import InternshipsPage from "@/pages/InternshipsPage.vue";
+import HelpPage from "@/pages/HelpPage.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -35,6 +37,16 @@ const routes: RouteRecordRaw[] = [
         path: "/vacansy",
         name: "vacansy", 
         component: VacansyPage,
+      },
+      {
+        path:"/internships", 
+        name: "internships",
+        component: InternshipsPage
+      },
+      {
+         path:"/help", 
+        name: "Help",
+        component: HelpPage
       },
       {
         path:"/candidate",

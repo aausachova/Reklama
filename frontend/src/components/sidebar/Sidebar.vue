@@ -1,117 +1,163 @@
 <template>
-    <aside ref="sidebarRef" class="sidebar dark:!bg-background" :inert="!appStore.isSidebarOpen" :class="{
-        'sidebar-open': appStore.isSidebarOpen,
-        'sidebar-mobile': appStore.isMobile,
-        'sidebar-closed': !appStore.isSidebarOpen
-    }">
-        <div class="flex flex-col justify-center items-start h-[56px] gap-2 px-5">
-            <Button variant="ghost" class="p-0 w-[32px] h-[32px]" @click="appStore.closeSidebar">
-                <PanelLeft />
-            </Button>
-        </div>
-        <div class="flex flex-col gap-2 p-2">
-                        <img width="165" height="400" class=" max-w-full mb-5    size-96 h-auto" src="/img/Logo.svg" />
+  <aside
+    ref="sidebarRef"
+    class="sidebar dark:!bg-background"
+    :inert="!appStore.isSidebarOpen"
+    :class="{
+      'sidebar-open': appStore.isSidebarOpen,
+      'sidebar-mobile': appStore.isMobile,
+      'sidebar-closed': !appStore.isSidebarOpen,
+    }"
+  >
+    <!-- 🔹 Кнопка закрытия -->
+    <div class="flex flex-col justify-center items-start h-[56px] gap-2 px-5">
+      <Button
+        variant="ghost"
+        class="p-0 w-[32px] h-[32px]"
+        @click="appStore.closeSidebar"
+      >
+        <PanelLeft />
+      </Button>
+    </div>
 
-            <SidebarUserMenu v-if="authStore.user"  />
-            <div v-else class="flex flex-col h-[49.5px] gap-1.5">
-                <Skeleton class="h-4 w-full" />
-                <Skeleton class="h-4 w-[80%]" />
-            </div>
-        </div>
-        <ScrollArea class="flex flex-1 flex-col gap-2 overflow-x-hidden min-h-0  ">
-            <SidebarNav :links="USER_LINKS" />
-        </ScrollArea>
+    <!-- 🔹 Логотип + юзер -->
+    <div class="flex flex-col gap-2 p-2">
+      <img
+        width="165"
+        height="400"
+        class="max-w-full mb-5 size-96 h-auto"
+        src="/img/Logo.svg"
+      />
 
-        <!-- <div class="flex flex-col gap-2 p-2" >
-            <SidebarNav :label="'Admin'" :links="ADMIN_LINKS" />
+      <SidebarUserMenu v-if="authStore.user" />
+      <div v-else class="flex flex-col h-[49.5px] gap-1.5">
+        <Skeleton class="h-4 w-full" />
+        <Skeleton class="h-4 w-[80%]" />
+      </div>
+    </div>
 
-        </div> -->
-    </aside>
-    <div v-if="appStore.isSidebarOpen && appStore.isMobile" class="sidebar-overlay" @click="appStore.closeSidebar" />
+    <!-- 🔹 Основное меню -->
+    <ScrollArea class="flex flex-1 flex-col gap-2 overflow-x-hidden min-h-0">
+      <SidebarNav :links="menuItems" />
+    </ScrollArea>
+  </aside>
+  {{ isCurator }}
+  {{ isResident }}
+  <!-- 🔹 Оверлей для мобилки -->
+  <div
+    v-if="appStore.isSidebarOpen && appStore.isMobile"
+    class="sidebar-overlay"
+    @click="appStore.closeSidebar"
+  />
 </template>
 
 <script setup lang="ts">
-import SidebarUserMenu from './SidebarUserMenu.vue';
-import SidebarNav from './SidebarNav.vue';
-import { HouseIcon, type LucideIcon, BookIcon, SettingsIcon, PanelLeft, ChartColumn, PanelsTopLeft, Calendar, NotepadText, MessageCircle, UserIcon, NotepadTextIcon } from 'lucide-vue-next';
-import Button from '@/components/ui/button/Button.vue';
-import { onClickOutside, useEventListener } from '@vueuse/core';
-import { useAppStore } from '@/stores/appStore';
-import { ref } from 'vue';
-import { useAuthStore } from '@/stores/authStore';
-import { Skeleton } from '@/components/ui/skeleton';
-import ScrollArea from '../ui/scroll-area/ScrollArea.vue';
+import { ref, computed } from "vue"
+import { onClickOutside } from "@vueuse/core"
+
+import SidebarUserMenu from "./SidebarUserMenu.vue"
+import SidebarNav from "./SidebarNav.vue"
+import Button from "@/components/ui/button/Button.vue"
+import ScrollArea from "../ui/scroll-area/ScrollArea.vue"
+import { Skeleton } from "@/components/ui/skeleton"
+
+import {
+  HouseIcon,
+  BookIcon,
+  Calendar,
+  MessageCircle,
+  NotepadTextIcon,
+  PanelsTopLeft,
+  ChartColumn,
+  PanelLeft,
+  UsersIcon,
+  Building2,
+} from "lucide-vue-next"
+
+import { useAppStore } from "@/stores/appStore"
+import { useAuthStore } from "@/stores/authStore"
+import { useRoles } from "@/composables/useRoles"
+
 export interface Links {
-    label: string;
-    url: string;
-    icon: LucideIcon;
+  label: string
+  url: string
+  icon: any
 }
-const authStore = useAuthStore();
-const appStore = useAppStore();
-const sidebarRef = ref<HTMLElement | null>(null);
 
+const authStore = useAuthStore()
+const appStore = useAppStore()
+const sidebarRef = ref<HTMLElement | null>(null)
 onClickOutside(sidebarRef, () => {
-    if (appStore.isMobile && appStore.isSidebarOpen) {
-        appStore.closeSidebar();
-    }
-});
+  if (appStore.isMobile && appStore.isSidebarOpen) appStore.closeSidebar()
+})
+
+const { isCurator, isResident } = useRoles()
+
+// 🔹 Меню для всех
+const BASE_LINKS: Links[] = [
+  { label: "Главная", url: "/", icon: HouseIcon },
+  { label: "Стажировки", url: "/internships", icon: BookIcon },
+  { label: "Сообщения", url: "/chat", icon: MessageCircle },
+  { label: "Помощь", url: "/help", icon: NotepadTextIcon },
+]
+
+// 🔹 Дополнительные ссылки для резидента
+const RESIDENT_LINKS: Links[] = [
+  { label: "Вакансии", url: "/vacansy", icon: Calendar },
+  { label: "Кандидаты", url: "/candidate", icon: UsersIcon },
+  { label: "Мои стажёры", url: "/interns", icon: UsersIcon },
+  { label: "Компания", url: "/company", icon: Building2 },
+]
 
 
 
-const USER_LINKS: Links[] = [
-    { label: 'sidebar.home', url: '/', icon: HouseIcon },
-        { label: 'Вакансии', url: '/vacansy', icon: BookIcon },
-    { label: 'Кандидаты', url: '/candidate', icon: Calendar },
-       { label: 'Сообщения', url: '/chat', icon: MessageCircle },
-      { label: 'Помощь', url: '/help', icon: NotepadTextIcon },
-];
-const ADMIN_LINKS: Links[] = [
-    { label: 'Панель управления', url: '/users', icon: PanelsTopLeft },
-    { label: 'Аналитика данных', url: '/dashboard', icon: ChartColumn },
-];
-
+// 🔹 Выбор ссылок в зависимости от роли
+const menuItems = computed(() => {
+  if (isCurator.value) return BASE_LINKS
+  if (isResident.value) return [...BASE_LINKS, ...RESIDENT_LINKS]
+  return BASE_LINKS // если роль не определена — просто базовые
+})
 </script>
 
 <style scoped>
 .sidebar {
-    grid-area: sidebar;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 270px;
-    min-width: 0;
-    border-radius: 0 40px 40px 0;
-    box-shadow: 1px 0 0 0 var(--border);
-    overflow: hidden;
-    z-index: 50;
-    will-change: transform;
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 270px;
+  border-radius: 0 40px 40px 0;
+  box-shadow: 1px 0 0 0 var(--border);
+  overflow: hidden;
+  z-index: 50;
+  will-change: transform;
 }
 
 @media (max-width: 768px) {
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: min(100%, 270px);
-        transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: none;
-    }
-
-    .sidebar.sidebar-open {
-        transform: translateX(0);
-        box-shadow: 1px 0 0 0 var(--border);
-    }
-}
-
-.sidebar-overlay {
+  .sidebar {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: 40;
+    bottom: 0;
+    width: min(100%, 270px);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+    box-shadow: 1px 0 0 0 var(--border);
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 40;
 }
 </style>

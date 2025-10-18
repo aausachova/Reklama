@@ -3,12 +3,18 @@
     <div class="my-5 flex flex-wrap justify-between items-center gap-3">
       <h1 class="text-2xl font-semibold">Витрина вакансий</h1>
 
-      <Button v-if="!isCurator" @click="goToCreate" class="bg-accent text-white hover:opacity-90">
+      <Button
+        v-if="!isCurator"
+        @click="goToCreate"
+        class="bg-accent text-white hover:opacity-90"
+      >
         + Создать вакансию
       </Button>
     </div>
 
+    <!-- Фильтры -->
     <div class="flex flex-wrap gap-3 items-center mb-6">
+      <!-- Поиск -->
       <div class="flex items-center flex-grow min-w-[250px] relative">
         <Search class="absolute left-3 text-muted-foreground w-4 h-4" />
         <Input
@@ -18,15 +24,20 @@
         />
       </div>
 
+      <!-- Компания -->
       <Select v-model="selectedCompany">
         <SelectTrigger class="w-[180px]">
           <SelectValue placeholder="Компания" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Все компании</SelectItem>
-          <SelectItem value="biocad">БИОКАД</SelectItem>
-          <SelectItem value="cnk">НЦК</SelectItem>
-          <SelectItem value="ao">АО</SelectItem>
+          <SelectItem
+            v-for="c in filters.company"
+            :key="c"
+            :value="c"
+          >
+            {{ c }}
+          </SelectItem>
         </SelectContent>
       </Select>
 
@@ -37,9 +48,13 @@
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Все направления</SelectItem>
-          <SelectItem value="fabric">Производство</SelectItem>
-          <SelectItem value="medicine">Медицина</SelectItem>
-          <SelectItem value="it">IT</SelectItem>
+          <SelectItem
+            v-for="d in filters.direction"
+            :key="d"
+            :value="d"
+          >
+            {{ d }}
+          </SelectItem>
         </SelectContent>
       </Select>
 
@@ -50,9 +65,13 @@
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Все типы</SelectItem>
-          <SelectItem value="full">Полная</SelectItem>
-          <SelectItem value="part">Частичная</SelectItem>
-          <SelectItem value="internship">Стажировка</SelectItem>
+          <SelectItem
+            v-for="t in filters.type"
+            :key="t"
+            :value="t"
+          >
+            {{ t }}
+          </SelectItem>
         </SelectContent>
       </Select>
 
@@ -70,6 +89,7 @@
 
     <!-- Список вакансий -->
     <div v-if="pending" class="text-muted-foreground text-sm">Загрузка...</div>
+    <div v-else-if="error" class="text-destructive text-sm">{{ error }}</div>
 
     <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <Card
@@ -110,18 +130,27 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import axios from "axios"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardTitle } from "@/components/ui/card"
 import { Search } from "lucide-vue-next"
 import Button from "@/components/ui/button/Button.vue"
-import axios from "axios"
 import { useRoles } from "@/composables/usePermissions"
-const {isCurator } = useRoles()
+
+const { isCurator } = useRoles()
 
 const route = useRoute()
 const router = useRouter()
+
+// --- фильтры и вакансии ---
+const filters = ref({
+  company: [] as string[],
+  type: [] as string[],
+  direction: [] as string[],
+  city: [] as string[],
+})
 
 const search = ref(route.query.search?.toString() || "")
 const selectedCompany = ref(route.query.company?.toString() || "all")
@@ -133,10 +162,20 @@ const vacancies = ref<any[]>([])
 const pending = ref(false)
 const error = ref<string | null>(null)
 
+// --- загрузка фильтров ---
+async function fetchFilters() {
+  try {
+    const { data } = await axios.get("/api/vacancy/filters")
+    filters.value = data
+  } catch (e) {
+    console.error("Ошибка при загрузке фильтров:", e)
+  }
+}
+
+// --- загрузка вакансий ---
 async function fetchVacancies() {
   pending.value = true
   error.value = null
-
   try {
     const params: Record<string, string> = {}
     if (selectedCompany.value !== "all") params.company = selectedCompany.value
@@ -153,8 +192,11 @@ async function fetchVacancies() {
   }
 }
 
-onMounted(fetchVacancies)
+onMounted(async () => {
+  await Promise.all([fetchFilters(), fetchVacancies()])
+})
 
+// --- фильтрация ---
 const filteredVacancies = computed(() => {
   return vacancies.value.filter((v) => {
     const matchesSearch = search.value
@@ -165,6 +207,7 @@ const filteredVacancies = computed(() => {
   })
 })
 
+// --- обновление URL и данных при смене фильтров ---
 watch(
   [selectedCompany, selectedDirection, selectedType],
   () => {
