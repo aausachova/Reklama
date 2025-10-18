@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import Request, Depends
 
 from src.domain.services import UserService, VacancyService
+from src.domain.services.resume.service import ResumeMatchingService
 from src.postgre_module.engine import DatabaseSessionManager
 from src.postgre_module.repository import UserRepository, PermissionRepository, RoleRepository, VacancyRepository
 from src.redis_module import RedisSessionManager
@@ -65,6 +66,9 @@ def get_user_service(user_repository=Depends(get_user_repository),
 def get_vacancy_service(vacancy_repository=Depends(get_vacancy_repository)):
     return VacancyService(vacancy_repository)
 
+def get_resume_matching_service(vacancy_repository=Depends(get_vacancy_repository)):
+    return ResumeMatchingService(vacancy_repository)
 
 UserServiceDepends = Annotated[UserService, Depends(get_user_service)]
 VacancyServiceDepends = Annotated[VacancyService, Depends(get_vacancy_service)]
+ResumeMatchingServiceDepends = Annotated[ResumeMatchingService, Depends(get_resume_matching_service)]

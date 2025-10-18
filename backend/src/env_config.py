@@ -16,6 +16,11 @@ class RedisConfig(LocalSettings):
     def url(self) -> str:
         return f"redis://{self.user}:{self.password}@{self.host}:{self.port}"
 
+class ModelConfig(LocalSettings):
+    BASE_URL: str = Field(default="https://api.openai.com/v1", alias="OPENAI_BASE_URL")
+    PROVIDER: str = Field(default="openai", alias="OPENAI_PROVIDER")
+    MODEL: str = Field(default="gpt-5", alias="OPENAI_MODEL_NAME")
+
 #
 # class RabbitConfig(LocalSettings):
 #     host: str = Field(default="localhost", alias="RABBITMQ_HOST")
@@ -51,7 +56,7 @@ class Env(LocalSettings):
     postgres: PostgresConfig = Field(default_factory=PostgresConfig)    # type: ignore
     server: ServerConfig = Field(default_factory=ServerConfig)          # type: ignore
     redis: RedisConfig = Field(default_factory=RedisConfig)             # type: ignore
-
+    model: ModelConfig = Field(default_factory=ModelConfig)             # type: ignore
     @classmethod
     def load(cls) -> "Env":
         return cls()
