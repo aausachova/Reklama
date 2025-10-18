@@ -1,0 +1,21 @@
+from uuid import UUID
+from pydantic import BaseModel
+
+
+class UserInfo(BaseModel):
+    user_id: UUID
+    user_name: str
+    permissions: list[str]
+    role: str
+
+
+class SignUpRequest(BaseModel):
+    username: str
+    password: str
+    repeat_password: str
+    role: str
+
+
+class LogInRequest(BaseModel):
+    username: str
+    password: str
