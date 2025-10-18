@@ -11,7 +11,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Или hardcode: "sk-YourKeyHere
 MODEL = os.getenv("OPENAI_MODEL_NAME")
 BASE_URL = os.getenv("OPENAI_BASE_URL")
 PROVIDER = os.getenv("OPENAI_PROVIDER")
-PDF_PATH = "resume.pdf"  # Путь к файлу
+PDF_PATH = "test_resume_2.pdf"  # Путь к файлу
 
 async def call_g4f_api(prompt: str, text: str) -> tuple[str, str]:
     url = f"{BASE_URL}/chat/completions"
@@ -22,7 +22,8 @@ async def call_g4f_api(prompt: str, text: str) -> tuple[str, str]:
             {"role": "system", "content": prompt},
             {"role": "user", "content": text}
         ],
-        "stream": True
+        "stream": True,
+        "stream_timeout": 120
     }
     headers = {
         "Content-Type": "application/json",
@@ -74,8 +75,8 @@ def parse_resume_with_openai(text):
     """Парсинг через OpenAI: prompt для JSON-output"""
     prompt = f"""Извлеки из следующего текста резюме информацию в строгом JSON формате (без лишнего текста):
     {{
-        "skills": ["список навыков, разделённых запятыми, например: 'Python, SQL, Excel'"],
-        "education": ["строка с образованием, включая вуз, специальность и год, например: 'МГУ, Информатика, 2020'"],
+        "skills": ["список навыков"] например ["Оценка рисков", "Python", "SQL"],
+        "education": ["строка с образованием, включая вуз, специальность и год, например: 'МГУ, Информатика, 2020-2024'"],
         "experience": ["список опытов в формате: 'Должность в Компании (годы, обязанности кратко)', например: 'Developer в Yandex (2021-2025, разработка бэкенда)'"]
     }}
 
@@ -101,3 +102,6 @@ if __name__ == "__main__":
     parsed_data = parse_resume_with_openai(full_text)
     print("\nПарсинг результата:")
     print(json.dumps(parsed_data, ensure_ascii=False, indent=2))
+
+    with open('resume.json', 'w', encoding='utf-8') as f:
+        json.dump(parsed_data, f, ensure_ascii=False, indent=4)

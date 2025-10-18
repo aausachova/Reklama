@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 IDs = [
+  "2039",
   "96046",
   "96039",
   "96037",
@@ -181,7 +182,6 @@ IDs = [
   "2036",
   "2037",
   "2038",
-  "2039",
   "2040",
   "2041",
   "2042",
@@ -288,9 +288,12 @@ IDs = [
 
 vacancies = []
 
-for id in IDs[:100]:
+for id in IDs[:50]:
     url = f"https://technomoscow.ru/tech-work/detail.php?ID={id}"
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except:
+        continue
     response.encoding = "utf-8"  # чтобы корректно обрабатывалась кириллица
 
     soup = BeautifulSoup(response.text, "html.parser")
