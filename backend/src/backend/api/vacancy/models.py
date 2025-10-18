@@ -23,3 +23,9 @@ class VacancyResponse(BaseModel):
     class Config:
         orm_mode = True
 
+
+class VacancyFiltersResponse(BaseModel):
+    city: list[str]
+    company: list[str]
+    type: list[str]
+    direction: list[str]

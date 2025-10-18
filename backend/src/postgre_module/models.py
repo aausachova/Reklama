@@ -8,6 +8,7 @@ from sqlalchemy.ext.mutable import MutableList
 from . import Base
 from typing import List
 from datetime import datetime
+from sqlalchemy.dialects.postgresql import ARRAY, TEXT
 
 
 class User(Base):
@@ -98,3 +99,4 @@ class Vacancy(Base):
     type: Mapped[str]
     direction: Mapped[str]
     experience: Mapped[bool]
+    requirements: Mapped[list[str]] = mapped_column(ARRAY(TEXT), default=[])

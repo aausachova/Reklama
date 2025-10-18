@@ -20,3 +20,6 @@ class VacancyService():
     async def get_all_vacancies(self, company: str | None, direction: str | None, type: str | None) -> list[VacancyResponse]:
         vacancies = await self.vacancy_repository.get_all(company, direction, type)
         return [VacancyResponse.model_validate(v, from_attributes=True) for v in vacancies]
+
+    async def get_filters(self) -> dict[str, list[str]]:
+        return await self.vacancy_repository.get_filters()

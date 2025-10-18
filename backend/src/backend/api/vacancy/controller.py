@@ -3,7 +3,7 @@ from src.domain.services import VacancyService
 from fastapi import Depends
 from typing import Annotated
 from fastapi_controllers import Controller, get, post
-from .models import CreateVacancyRequest, VacancyResponse
+from .models import CreateVacancyRequest, VacancyResponse, VacancyFiltersResponse
 from uuid import UUID
 
 
@@ -27,3 +27,6 @@ class VacancyController(Controller):
     async def get_all_vacancies(self, company: str | None = None, direction: str | None = None, type: str | None = None):
         return await self.vacancy_service.get_all_vacancies(company, direction, type)
 
+    @get("/filters", response_model=VacancyFiltersResponse)
+    async def get_filters(self):
+        return await self.vacancy_service.get_filters()
