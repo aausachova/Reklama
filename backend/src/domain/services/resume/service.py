@@ -10,9 +10,11 @@ from src.env_config import env
 from src.postgre_module.models import Vacancy
 from src.postgre_module.repository.vacancy_repository import VacancyRepository
 
+
 class ResumeMatchingService:
     def __init__(self, vacancy_repository: VacancyRepository):
-        self.model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+        self.model = SentenceTransformer(
+            'paraphrase-multilingual-MiniLM-L12-v2')
         self.vacancy_repository = vacancy_repository
 
     async def extract_text_from_pdf(self, pdf_path: str) -> str:
@@ -46,7 +48,8 @@ class ResumeMatchingService:
             async with session.post(url, headers=headers, json=body) as resp:
                 if resp.status != 200:
                     error_text = await resp.text()
-                    raise Exception(f"Failed to send message: {resp.status} {error_text}")
+                    raise Exception(
+                        f"Failed to send message: {resp.status} {error_text}")
 
                 async for line in resp.content:
                     decoded_line = line.decode('utf-8').strip()
@@ -55,7 +58,8 @@ class ResumeMatchingService:
                     if decoded_line.startswith("data: "):
                         try:
                             data = json.loads(decoded_line[6:])
-                            message = data.get("choices", [{}])[0].get("delta", {}).get("content")
+                            message = data.get("choices", [{}])[0].get(
+                                "delta", {}).get("content")
                             if message:
                                 api_text += message
                         except json.JSONDecodeError:
@@ -71,15 +75,16 @@ class ResumeMatchingService:
                 return result_text, thinking_text
 
     async def parse_resume_with_ai(self, text: str) -> dict:
-        prompt = """Извлеки из следующего текста резюме информацию в строгом JSON формате (без лишнего текста):
-        {
+        prompt = f"""Извлеки из следующего текста резюме информацию в строгом JSON формате (без лишнего текста):
+        {{
             "skills": ["список навыков"] например ["Оценка рисков", "Python", "SQL"],
             "education": ["строка с образованием, включая вуз, специальность и год, например: 'МГУ, Информатика, 2020-2024'"],
-            "experience": ["список опытов в формате: 'Должность в Компании (годы, обязанности кратко)', например: 'Developer в Yandex (2021-2025, разработка бэкенда)'"]
-        }
+            "experience": ["список опытов в формате: 'Должность в Компании (годы, обязанности кратко)', например: 'Developer в Yandex (2021-2025, разработка бэкенда)'"],
+            "category": "IT" // Отнеси резюме к одной из следующих категорий: Микроэлектроника, HR, IT, Административная работа, Другое, Логистика, Маркетинг, Медицина, Продажи, Производство, Финансы, Юриспруденция
+        }}
 
         Верни ТОЛЬКО JSON."""
-        result_text, _ = await self.call_g4f_api(prompt, text[:8000])  # Truncate to ~8k tokens
+        result_text, _ = await self.call_g4f_api(prompt, text)  # Truncate to ~8k tokens
         try:
             parsed = json.loads(result_text)
             return parsed
@@ -93,7 +98,7 @@ class ResumeMatchingService:
         return [skills, education, experience]
 
     def prepare_vacancy_text(self, vacancy: Vacancy) -> str:
-        return " ".join(vacancy.requirements)
+        return " ".join(vacancy.skills)
 
     def get_embeddings(self, texts: list[str]) -> np.ndarray:
         return self.model.encode(texts)
@@ -109,7 +114,7 @@ class ResumeMatchingService:
             resume_data = await self.parse_resume_with_ai(full_text)
 
             vacancies = await self.vacancy_repository.get_all()
-            
+            vacancies = [v for v in vacancies if v.direction == resume_data['category']]
             # Prepare resume embeddings (average of sections)
             resume_texts = self.prepare_resume_texts(resume_data)
             resume_embs = self.get_embeddings(resume_texts)
@@ -117,16 +122,20 @@ class ResumeMatchingService:
             resume_emb = resume_emb / np.linalg.norm(resume_emb)  # Normalize
 
             # Prepare vacancy texts and embeddings
-            vacancy_texts = [self.prepare_vacancy_text(v) for v in vacancies if v.requirements]
+            vacancy_texts = [self.prepare_vacancy_text(
+                v) for v in vacancies if v.requirements]
             if not vacancy_texts:
                 return []
 
             vacancy_embs = self.get_embeddings(vacancy_texts)
-            vacancy_embs = vacancy_embs / np.linalg.norm(vacancy_embs, axis=1, keepdims=True)  # Normalize
+            vacancy_embs = vacancy_embs / \
+                np.linalg.norm(vacancy_embs, axis=1,
+                               keepdims=True)  # Normalize
 
             # Create FAISS index
             dimension = vacancy_embs.shape[1]
-            index = faiss.IndexFlatIP(dimension)  # Inner Product for cosine similarity
+            # Inner Product for cosine similarity
+            index = faiss.IndexFlatIP(dimension)
             index.add(vacancy_embs)
 
             # Search for top matches

@@ -14,9 +14,9 @@ class VacancyRepository():
         return await self.session.scalar(stmt)
 
     async def create(self, title: str, city: str, company: str, type: str, direction: str, experience: bool,
-                     requirements: list[str] = []) -> Vacancy:
+                     requirements: list[str] = [], skills: list[str] = []) -> Vacancy:
         vacancy = Vacancy(title=title, city=city, company=company, type=type, direction=direction,
-                          experience=experience, requirements=requirements)
+                          experience=experience, requirements=requirements, skills=skills)
         self.session.add(vacancy)
         await self.session.flush()
         return vacancy

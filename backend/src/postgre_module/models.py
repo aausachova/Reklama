@@ -100,6 +100,7 @@ class Vacancy(Base):
     direction: Mapped[str]
     experience: Mapped[bool]
     requirements: Mapped[list[str]] = mapped_column(ARRAY(TEXT), default=[])
+    skills: Mapped[list[str]] = mapped_column(ARRAY(TEXT), default=[])
     active: Mapped[bool] = mapped_column(default=False, nullable=True)
 
 
