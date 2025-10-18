@@ -10,6 +10,8 @@
             </Button>
         </div>
         <div class="flex flex-col gap-2 p-2">
+                        <img width="165" height="400" class=" max-w-full mb-5    size-96 h-auto" src="/img/Logo.svg" />
+
             <SidebarUserMenu v-if="authStore.user"  />
             <div v-else class="flex flex-col h-[49.5px] gap-1.5">
                 <Skeleton class="h-4 w-full" />
@@ -20,10 +22,10 @@
             <SidebarNav :links="USER_LINKS" />
         </ScrollArea>
 
-        <div class="flex flex-col gap-2 p-2" v-if="usePermissions().hasRole('Administrator')">
+        <!-- <div class="flex flex-col gap-2 p-2" >
             <SidebarNav :label="'Admin'" :links="ADMIN_LINKS" />
 
-        </div>
+        </div> -->
     </aside>
     <div v-if="appStore.isSidebarOpen && appStore.isMobile" class="sidebar-overlay" @click="appStore.closeSidebar" />
 </template>
@@ -31,7 +33,7 @@
 <script setup lang="ts">
 import SidebarUserMenu from './SidebarUserMenu.vue';
 import SidebarNav from './SidebarNav.vue';
-import { HouseIcon, type LucideIcon, BookIcon, SettingsIcon, PanelLeft, ChartColumn, PanelsTopLeft, Calendar, NotepadText, MessageCircle, UserIcon } from 'lucide-vue-next';
+import { HouseIcon, type LucideIcon, BookIcon, SettingsIcon, PanelLeft, ChartColumn, PanelsTopLeft, Calendar, NotepadText, MessageCircle, UserIcon, NotepadTextIcon } from 'lucide-vue-next';
 import Button from '@/components/ui/button/Button.vue';
 import { onClickOutside, useEventListener } from '@vueuse/core';
 import { useAppStore } from '@/stores/appStore';
@@ -39,7 +41,6 @@ import { ref } from 'vue';
 import { useAuthStore } from '@/stores/authStore';
 import { Skeleton } from '@/components/ui/skeleton';
 import ScrollArea from '../ui/scroll-area/ScrollArea.vue';
-import { usePermissions } from '@/composables/usePermissions';
 export interface Links {
     label: string;
     url: string;
@@ -59,12 +60,10 @@ onClickOutside(sidebarRef, () => {
 
 const USER_LINKS: Links[] = [
     { label: 'sidebar.home', url: '/', icon: HouseIcon },
-    { label: 'Создание вакансии', url: '/projects', icon: BookIcon },
-    // { label: 'Мероприятия', url: '/events', icon: Calendar },
-    { label: 'Чаты', url: '/chat', icon: MessageCircle },
-    //{ label: 'sidebar.settings', url: '/settings', icon: SettingsIcon },
-    { label: 'Карьера', url: '/career', icon: NotepadText },
-      { label: 'Помощь', url: '/help', icon: UserIcon },
+        { label: 'Вакансии', url: '/vacansy', icon: BookIcon },
+    { label: 'Кандидаты', url: '/candidate', icon: Calendar },
+       { label: 'Сообщения', url: '/chat', icon: MessageCircle },
+      { label: 'Помощь', url: '/help', icon: NotepadTextIcon },
 ];
 const ADMIN_LINKS: Links[] = [
     { label: 'Панель управления', url: '/users', icon: PanelsTopLeft },
@@ -75,7 +74,6 @@ const ADMIN_LINKS: Links[] = [
 
 <style scoped>
 .sidebar {
-    background-color: #FFFFFF;
     grid-area: sidebar;
     display: flex;
     flex-direction: column;

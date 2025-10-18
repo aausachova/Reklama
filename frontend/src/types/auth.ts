@@ -16,9 +16,9 @@ interface UnlockedAchievement {
 
 export interface User {
   user_id: number;
-  username: string;
-  email: string;
-  created_at: string;
+  user_name: string;
+  permissions:[]
+  role: string;
 }
 export interface LoginCredentials {
   username: string;

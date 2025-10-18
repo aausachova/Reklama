@@ -88,13 +88,7 @@ async function fetchNotifications() {
             date: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
             read: true
         },
-        {
-            id: 3,
-            title: 'Завершение задачи',
-            description: 'Задача "Создание компонента уведомлений" была успешно завершена',
-            date: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-            read: false
-        }
+       
     ]
 
     isLoading.value = false

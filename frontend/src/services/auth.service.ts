@@ -19,7 +19,7 @@ export class AuthService {
   static async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
       const response = await apiClient.post<AuthResponse>(
-        "/api/login",
+        "/api/auth/login",
         credentials
       );
       return response.data;
@@ -31,7 +31,7 @@ export class AuthService {
   // Регистрация пользователя
   static async register(credentials: RegisterCredentials): Promise<void> {
     try {
-      await apiClient.post("/api/register", credentials);
+      await apiClient.post("/api/auth/registration", credentials);
     } catch (error: any) {
       throw new Error(error.response?.data?.error || "Ошибка регистрации");
     }
@@ -39,7 +39,7 @@ export class AuthService {
 
   static async logout(): Promise<void> {
     try {
-      await apiClient.post("/api/logout");
+      await apiClient.post("/api/auth/logout");
     } catch (error: any) {
       throw new Error(error.response?.data?.error || "Ошибка выхода");
     }
@@ -48,7 +48,7 @@ export class AuthService {
   // Получение данных пользователя
   static async getUserData(): Promise<any> {
     try {
-      const response = await apiClient.get("/api/user");
+      const response = await apiClient.get("/api/auth");
       return response.data;
     } catch (error: any) {
       throw new Error(

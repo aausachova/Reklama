@@ -26,9 +26,9 @@
                                 <template v-if="filteredChats.length">
                                     <button v-for="chat in filteredChats" :key="chat.id"
                                         class="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors"
-                                        :class="{ 'bg-accent': selectedChat?.id === chat.id }" @click="selectChat(chat)">
+                                        :class="{ 'bg-muted': selectedChat?.id === chat.id }" @click="selectChat(chat)">
                                         <Avatar class="size-10 shrink-0">
-                                            <AvatarFallback class="bg-primary text-primary-foreground font-semibold">
+                                            <AvatarFallback class=" bg-accent text-primary-foreground font-semibold">
                                                 {{ chat.user.initials }}
                                             </AvatarFallback>
                                         </Avatar>
@@ -61,7 +61,7 @@
                             <div class="flex-none border-b p-4 flex items-center justify-between">
                                 <div class="flex items-center gap-3">
                                     <Avatar class="size-10">
-                                        <AvatarFallback class="bg-primary text-primary-foreground font-semibold">
+                                        <AvatarFallback class="bg-accent text-primary-foreground font-semibold">
                                             {{ selectedChat.user.initials }}
                                         </AvatarFallback>
                                     </Avatar>
@@ -91,7 +91,7 @@
                                     <div class="flex items-end gap-2" :class="message.isOwn ? 'flex-row-reverse' : ''">
                                         <Avatar v-if="!message.isOwn" class="size-8 mb-1">
                                             <AvatarFallback
-                                                class="bg-primary text-primary-foreground text-xs font-semibold">
+                                                class="bg-accent text-primary-foreground text-xs font-semibold">
                                                 {{ selectedChat.user.initials }}
                                             </AvatarFallback>
                                         </Avatar>

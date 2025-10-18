@@ -1,25 +1,11 @@
 <template>
     <section class="w-full flex flex-col  items-center pt-24 bg-background px-4">
         <div class="w-full max-w-[400px] flex flex-col items-center gap-4">
-            <img width="165" height="400" class=" max-w-full mb-25 size-96 h-auto" src="/img/Logo.svg" />
-            <div class="text-center  space-y-2 mb-6">
+      <img width="165" height="400" class="max-w-full mb-17 size-70 h-auto" src="/img/Logo.svg" />
+                <div class="text-center  space-y-2 mb-6">
                 <h1 class="text-2xl font-bold">{{ $t('auth.login.title') }}</h1>
                 <p class="text-sm text-muted-foreground">{{ $t('auth.login.subtitle') }}</p>
             </div>
-            <!-- <div class="flex flex-col w-full gap-4">
-                <Button size="lg" variant="outline">
-                    <Icon icon="mingcute:google-fill" />
-                    {{ $t('auth.login.googleLogin') }}
-                </Button>
-
-                <div
-                    class="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                    <span class="relative z-10 bg-background px-2 text-muted-foreground">
-                        {{ $t('auth.login.or') }}
-                    </span>
-                </div>
-            </div> -->
-
             <form @submit="onSubmit" class="w-full space-y-4">
                 <FormField v-slot="{ componentField }" name="username" :validate-on-blur="!isFieldDirty">
                     <FormItem class=" relative ">
@@ -61,7 +47,7 @@
             </form>
 
             <div class="w-full text-center text-sm">
-                <span class="text-muted-foreground">{{ $t('auth.login.noAccount') }}</span> <router-link
+                <span class="text-muted-foreground">{{ $t('auth.login.noAccount') }} </span> <router-link
                     to="/auth/register" class="text-primary hover:underline">{{ $t('auth.login.createAccount')
                     }}</router-link>
             </div>
