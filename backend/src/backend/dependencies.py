@@ -1,10 +1,10 @@
 from typing import Annotated
 from fastapi import Request, Depends
 
-from src.domain.services import UserService, VacancyService
+from src.domain.services import UserService, VacancyService, CandidateService
 from src.domain.services.resume.service import ResumeMatchingService
 from src.postgre_module.engine import DatabaseSessionManager
-from src.postgre_module.repository import UserRepository, PermissionRepository, RoleRepository, VacancyRepository
+from src.postgre_module.repository import UserRepository, PermissionRepository, RoleRepository, VacancyRepository, CandidateRepository
 from src.redis_module import RedisSessionManager
 from src.redis_module import RedisRepository
 
@@ -50,6 +50,10 @@ def get_vacancy_repository(session: Annotated[AsyncSession, Depends(get_db_sessi
     return VacancyRepository(session)
 
 
+def get_candidate_repository(session: Annotated[AsyncSession, Depends(get_db_session)]):
+    return CandidateRepository(session)
+
+
 def get_redis_repository(redis: Annotated[Redis, Depends(get_redis_session)]):
     return RedisRepository(redis)
 
@@ -69,6 +73,11 @@ def get_vacancy_service(vacancy_repository=Depends(get_vacancy_repository)):
 def get_resume_matching_service(vacancy_repository=Depends(get_vacancy_repository)):
     return ResumeMatchingService(vacancy_repository)
 
+def get_candidate_service(candidate_repository=Depends(get_candidate_repository)):
+    return CandidateService(candidate_repository)
+
+
 UserServiceDepends = Annotated[UserService, Depends(get_user_service)]
 VacancyServiceDepends = Annotated[VacancyService, Depends(get_vacancy_service)]
+CandidateServiceDepends = Annotated[CandidateService, Depends(get_candidate_service)]
 ResumeMatchingServiceDepends = Annotated[ResumeMatchingService, Depends(get_resume_matching_service)]

@@ -100,3 +100,13 @@ class Vacancy(Base):
     direction: Mapped[str]
     experience: Mapped[bool]
     requirements: Mapped[list[str]] = mapped_column(ARRAY(TEXT), default=[])
+
+class Candidate(Base):
+    __tablename__ = "candidate_table"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    full_name: Mapped[str]
+    direction: Mapped[str]
+    phone: Mapped[str]
+    email: Mapped[str]
+    status: Mapped[str]
