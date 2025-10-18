@@ -1,4 +1,3 @@
-from .models import LogInRequest, SignUpRequest, UserInfo
 from src.backend.dependencies import get_user_service
 from src.domain.services import UserService
 from fastapi import Response, Depends, Request, HTTPException

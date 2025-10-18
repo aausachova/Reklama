@@ -87,3 +87,14 @@ class Company(Base):
     logo_id: Mapped[UUID] = mapped_column(ForeignKey("file_table.id"))
     logo: Mapped[File] = relationship(lazy="selectin")
 
+
+class Vacancy(Base):
+    __tablename__ = "vacancy_table"
+
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    title: Mapped[str]
+    city: Mapped[str]
+    company: Mapped[str]
+    type: Mapped[str]
+    direction: Mapped[str]
+    experience: Mapped[bool]
