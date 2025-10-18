@@ -1,1 +1,1 @@
-uv run uvicorn src.backend.app:app --reload --host 0.0.0.0
+uv run --env-file .\.env uvicorn src.backend.app:app --reload --host 0.0.0.0
