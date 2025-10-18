@@ -14,27 +14,31 @@ export const useAuthStore = defineStore("auth", () => {
   const isAuthenticated = computed(() => !!user.value);
 
   // Загрузка данных пользователя
-  const setUserData = async () => {
-    try {
-      const userData = await AuthService.getUserData();
-      console.log("User data from server:", userData); // Логируем данные
+const setUserData = async () => {
+  try {
+    const userData = await AuthService.getUserData();
+    console.log("User data from server:", userData); // лог
 
-      if (!userData || !userData.id) {
-        throw new Error("Invalid user data received from server");
-      }
+    // поддержка разных форматов
+    const id = userData.user_id ?? userData.id;
+    const username = userData.username ?? userData.user_name;
+    const role = userData.role ?? "User";
 
-      user.value = {
-        user_id: userData.id,
-        username: userData.username,
-        email: userData.email,
-        created_at: userData.created_at,
-      };
-    } catch (e) {
-      console.error("Ошибка загрузки данных пользователя:", e);
-      user.value = null;
+    if (!id || !username) {
+      throw new Error("Invalid user data received from server");
     }
-  };
 
+    user.value = {
+      user_id: id,
+      user_name: username,
+      role,
+      permissions: userData.permissions || [],
+    };
+  } catch (e) {
+    console.error("Ошибка загрузки данных пользователя:", e);
+    user.value = null;
+  }
+};
   // Инициализация аутентификации
   async function initializeAuth() {
     if (authChecked.value) return;
@@ -121,10 +125,10 @@ export const useAuthStore = defineStore("auth", () => {
 
   // Генерация инициалов пользователя
   const userInitials = computed(() => {
-    if (!user.value?.username) {
+    if (!user.value?.user_name) {
       return "U";
     }
-    const username = user.value.username.trim();
+    const username = user.value.user_name.trim();
     if (!username) {
       return "U";
     }

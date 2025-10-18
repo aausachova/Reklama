@@ -16,14 +16,14 @@ import { onMounted } from 'vue'
 import router from './router';
 useColorMode();
 const authStore = useAuthStore()
-// onMounted(async () => {
-//   try {
-//     await authStore.initializeAuth();
-//     router.push('/')
-//   }
-//   catch (e) {
+onMounted(async () => {
+  try {
+    await authStore.initializeAuth();
+    router.push('/')
+  }
+  catch (e) {
 
-//   }
-// })
+  }
+})
 
 </script>

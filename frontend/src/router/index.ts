@@ -9,8 +9,11 @@ import GuestLayout from "@/layouts/GuestLayout.vue";
 import { authMiddleware } from "@/middleware/authMiddleware";
 import { titleMiddleware } from "@/middleware/titleMiddleware";
 import { roleMiddleware } from "@/middleware/roleMiddleware";
-import EventsPage from "@/pages/EventsPage.vue";
+
 import EventDetailsPage from "@/pages/events/[id].vue";
+import VacansyPage from "@/pages/VacansyPage.vue";
+import VacansyCreatePage from "@/pages/VacansyCreatePage.vue";
+import CandidatesPage from "@/pages/CandidatesPage.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -29,10 +32,19 @@ const routes: RouteRecordRaw[] = [
         component: HomePage,
       },
       {
-        path: "/events",
-        name: "events",
-        meta: { title: "Мероприятия" },
-        component: EventsPage,
+        path: "/vacansy",
+        name: "vacansy", 
+        component: VacansyPage,
+      },
+      {
+        path:"/candidate",
+        name: "candidate",
+        component: CandidatesPage,
+      },
+      {
+         path: "/vacancies/create",
+        meta: { title: "Вакансии" },
+        component: VacansyCreatePage,
         props: true,
       },
       {

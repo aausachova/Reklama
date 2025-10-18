@@ -3,13 +3,13 @@
         <DropdownMenuTrigger as-child>
             <Button variant="ghost" class="w-full h-auto p-2">
                 <Avatar class="  size-[52px] ">
-                    <AvatarImage src="/" :alt="authStore.user?.username" />
+                    <AvatarImage src="/" :alt="authStore.user?.user_name" />
                     <AvatarFallback class="dark:bg-muted font-bold bg-primary !text-white">
                         {{ authStore.userInitials }}
                     </AvatarFallback>
                 </Avatar>
                 <div class="grid flex-1 text-left text-sm leading-tight">
-                    <span class="truncate font-semibold text-lg">{{ authStore.user?.username }}</span>
+                    <span class="truncate font-semibold text-lg">{{ authStore.user?.user_name }}</span>
                     <span class="truncate text-xs font-medium  text-muted-foreground/70 ">{{ authStore.user?.role
                         }}</span>
                 </div>
@@ -21,14 +21,14 @@
                 <div class="flex flex-col gap-1 px-1 py-1 text-left text-sm">
                     <div class="flex gap-2   items-center ">
                         <Avatar class="h-8 w-8">
-                            <AvatarImage src="/" :alt="authStore.user?.username" />
+                            <AvatarImage src="/"  />
                             <AvatarFallback class="dark:bg-muted font-bold bg-primary !text-white">
                                 {{ authStore.userInitials }}
                             </AvatarFallback>
                         </Avatar>
                         <div class="grid flex-1 text-left text-sm leading-tight">
-                            <span class="truncate font-semibold">{{ authStore.user?.username }}</span>
-                            <span class="truncate text-xs">{{ authStore.user?.username }}</span>
+                            <span class="truncate font-semibold">{{ authStore.user?.user_name }}</span>
+                            <span class="truncate text-xs">{{ authStore.user?.user_name }}</span>
                         </div>
                     </div>
 

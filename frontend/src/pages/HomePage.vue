@@ -24,13 +24,11 @@
             </div>
         </div>
 
-        <!-- Основная сетка -->
         <div class="grid gap-4 lg:grid-cols-4 rounded-[32px]">
-            <!-- Статистика -->
             <Card class="lg:col-span-3">
                 <CardHeader class="flex justify-between items-center flex-wrap gap-3">
                     <div>
-                        <CardTitle class="text-xl font-semibold">Общая статистика</CardTitle>
+                        <CardTitle class="text-xl font-semibold">Показатели по найму</CardTitle>
                         <CardDescription>Динамика вакансий и откликов за период</CardDescription>
                     </div>
 
@@ -48,17 +46,16 @@
                 </CardHeader>
 
                 <CardContent class="h-full">
-                    <div class="w-full h-[280px]">
+                    <div class="w-full h-[440px]">
                         <AreaChart :period="chartPeriod" />
                     </div>
                 </CardContent>
             </Card>
 
-            <!-- Правая колонка: ключевые показатели -->
             <div class="flex flex-col gap-4">
                 <Card>
                     <CardHeader>
-                        <CardTitle>📈 Активные вакансии</CardTitle>
+                        <CardTitle>Активные вакансии</CardTitle>
                         <CardDescription>Количество открытых позиций</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -69,7 +66,7 @@
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>👥 Кандидаты</CardTitle>
+                        <CardTitle> Кандидаты</CardTitle>
                         <CardDescription>Новые отклики</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -80,7 +77,7 @@
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>🎓 Стажировки</CardTitle>
+                        <CardTitle> Стажировки</CardTitle>
                         <CardDescription>Активные предложения от вузов</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -90,7 +87,6 @@
                 </Card>
             </div>
 
-            <!-- Дополнительные карточки -->
             <Card class="lg:col-span-4">
                 <CardHeader class="flex justify-between items-center flex-wrap gap-3">
                     <CardTitle>Последние активности</CardTitle>

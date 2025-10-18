@@ -8,15 +8,15 @@ export async function authMiddleware(
 ) {
   const authStore = useAuthStore();
 
-  // if (authStore.isAuthenticated && to.meta.requiresGuest) {
-  //   return next("/");
-  // }
+  if (authStore.isAuthenticated && to.meta.requiresGuest) {
+    return next("/");
+  }
 
-  // if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-  //   return next({
-  //     path: "/auth/login",
-  //     query: { redirect: to.fullPath },
-  //   });
-  // }
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return next({
+      path: "/auth/login",
+      query: { redirect: to.fullPath },
+    });
+  }
   next();
 }
