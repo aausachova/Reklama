@@ -100,6 +100,8 @@ class Vacancy(Base):
     direction: Mapped[str]
     experience: Mapped[bool]
     requirements: Mapped[list[str]] = mapped_column(ARRAY(TEXT), default=[])
+    active: Mapped[bool] = mapped_column(default=False, nullable=True)
+
 
 class Candidate(Base):
     __tablename__ = "candidate_table"
@@ -109,4 +111,4 @@ class Candidate(Base):
     direction: Mapped[str]
     phone: Mapped[str]
     email: Mapped[str]
-    status: Mapped[str]
+    status: Mapped[str | None] = mapped_column(nullable=True)

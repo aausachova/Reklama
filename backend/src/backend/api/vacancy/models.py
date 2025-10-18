@@ -19,6 +19,7 @@ class VacancyResponse(BaseModel):
     type: str
     direction: str
     experience: bool
+    active: bool
 
     class Config:
         orm_mode = True
@@ -29,3 +30,6 @@ class VacancyFiltersResponse(BaseModel):
     company: list[str]
     type: list[str]
     direction: list[str]
+
+class UpdateVacancyRequest(BaseModel):
+    active: bool

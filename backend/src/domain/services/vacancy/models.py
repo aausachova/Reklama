@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from uuid import UUID
 
 
@@ -11,6 +11,10 @@ class CreateVacancyRequest(BaseModel):
     experience: bool
 
 
+class UpdateVacancyRequest(BaseModel):
+    active: bool
+
+
 class VacancyResponse(BaseModel):
     id: UUID
     title: str
@@ -19,7 +23,13 @@ class VacancyResponse(BaseModel):
     type: str
     direction: str
     experience: bool
+    active: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+    @field_validator("active", mode="before")
+    @classmethod
+    def validate_active(cls, v):
+        return bool(v)
 

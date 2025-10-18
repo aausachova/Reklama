@@ -39,6 +39,16 @@ class VacancyRepository():
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
+    async def update(self, vacancy: Vacancy, data: dict) -> Vacancy:
+        for key, value in data.items():
+            setattr(vacancy, key, value)
+        await self.session.flush()
+        return vacancy
+
+    async def delete(self, vacancy: Vacancy) -> None:
+        await self.session.delete(vacancy)
+        await self.session.flush()
+
     async def get_filters(self) -> dict[str, list[str]]:
         city_stmt = select(Vacancy.city).distinct()
         company_stmt = select(Vacancy.company).distinct()

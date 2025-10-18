@@ -12,8 +12,8 @@ class CandidateRepository():
         stmt = select(Candidate).where(Candidate.id == id)
         return await self.session.scalar(stmt)
 
-    async def create(self, full_name: str, direction: str, phone: str, email: str, status: str) -> Candidate:
-        candidate = Candidate(full_name=full_name, direction=direction, phone=phone, email=email, status=status)
+    async def create(self, full_name: str, direction: str, phone: str, email: str) -> Candidate:
+        candidate = Candidate(full_name=full_name, direction=direction, phone=phone, email=email, status=None)
         self.session.add(candidate)
         await self.session.flush()
         return candidate

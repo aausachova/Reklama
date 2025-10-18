@@ -1,9 +1,9 @@
 from src.backend.dependencies import get_vacancy_service
 from src.domain.services import VacancyService
-from fastapi import Depends
+from fastapi import Depends, Response, HTTPException
 from typing import Annotated
-from fastapi_controllers import Controller, get, post
-from .models import CreateVacancyRequest, VacancyResponse, VacancyFiltersResponse
+from fastapi_controllers import Controller, get, post, patch, delete
+from .models import CreateVacancyRequest, VacancyResponse, VacancyFiltersResponse, UpdateVacancyRequest
 from uuid import UUID
 
 
@@ -21,11 +21,28 @@ class VacancyController(Controller):
 
     @get("/{vacancy_id}", response_model=VacancyResponse)
     async def get_vacancy(self, vacancy_id: UUID):
-        return await self.vacancy_service.get_vacancy(vacancy_id)
+        vacancy = await self.vacancy_service.get_vacancy(vacancy_id)
+        if not vacancy:
+            raise HTTPException(status_code=404, detail="Vacancy not found")
+        return vacancy
 
     @get("/", response_model=list[VacancyResponse])
     async def get_all_vacancies(self, company: str | None = None, direction: str | None = None, type: str | None = None):
         return await self.vacancy_service.get_all_vacancies(company, direction, type)
+
+    @patch("/{vacancy_id}", response_model=VacancyResponse)
+    async def update_vacancy(self, vacancy_id: UUID, data: UpdateVacancyRequest):
+        vacancy = await self.vacancy_service.update_vacancy(vacancy_id, data)
+        if not vacancy:
+            raise HTTPException(status_code=404, detail="Vacancy not found")
+        return vacancy
+
+    @delete("/{vacancy_id}", status_code=204)
+    async def delete_vacancy(self, vacancy_id: UUID):
+        deleted = await self.vacancy_service.delete_vacancy(vacancy_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Vacancy not found")
+        return Response(status_code=204)
 
     @get("/filters", response_model=VacancyFiltersResponse)
     async def get_filters(self):

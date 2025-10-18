@@ -7,7 +7,6 @@ class CreateCandidateRequest(BaseModel):
     direction: str
     phone: str
     email: EmailStr
-    status: str
 
 
 class UpdateCandidateStatusRequest(BaseModel):
