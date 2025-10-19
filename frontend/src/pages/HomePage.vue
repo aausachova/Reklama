@@ -11,12 +11,12 @@
             </div>
 
             <div class="flex items-center gap-3">
-                <RouterLink to="/vacancies" class="text-sm font-medium py-1.5 px-3 rounded-full transition"
+                <RouterLink class="text-sm font-medium py-1.5 px-3 rounded-full transition"
                     :class="{ 'bg-accent text-white': $route.path === '/vacancies', 'hover:bg-muted': $route.path !== '/vacancies' }">
                     Вакансии
                 </RouterLink>
 
-                <RouterLink to="/analytics" class="text-sm font-medium py-1.5 px-3 rounded-full transition"
+                <RouterLink class="text-sm font-medium py-1.5 px-3 rounded-full transition"
                     :class="{ 'bg-accent text-white': $route.path === '/analytics', 'hover:bg-muted': $route.path !== '/analytics' }">
                     Аналитика
                 </RouterLink>

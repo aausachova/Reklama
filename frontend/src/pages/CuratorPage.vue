@@ -3,11 +3,7 @@
 <div class="my-5 flex flex-wrap justify-between items-center gap-3">
     <h1 class="text-2xl font-bold mb-6">Панель управления</h1>
 
-      <Button
-        class="text-white hover:opacity-90"
-      >
-Связаться с резидентом
-      </Button>
+   
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
       <Card
@@ -104,6 +100,7 @@ import type { Ref } from "vue"
 import { getLocalTimeZone, today } from "@internationalized/date"
 
 import { DownloadIcon, PlusIcon, UploadIcon } from "lucide-vue-next"
+import type { DateRange } from "reka-ui"
 
 // вычисляем дату 5 дней назад
 const start = today(getLocalTimeZone())

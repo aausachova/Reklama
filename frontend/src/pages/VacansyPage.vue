@@ -86,11 +86,14 @@
 
     <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <Card
+   
         v-for="vacancy in filteredVacancies"
+      
         :key="vacancy.id"
+        
         class="hover:shadow-md transition-shadow border rounded-2xl p-4 flex flex-col justify-between"
       >
-        <div>
+        <div >
           <div class="flex justify-between items-start mb-2">
             <CardTitle class="text-lg font-semibold">
               {{ vacancy.company }}
@@ -177,7 +180,10 @@ async function fetchVacancies() {
     if (selectedType.value !== "all") params.type = selectedType.value
 
     const { data } = await axios.get("/api/vacancy/", { params })
-    vacancies.value = Array.isArray(data) ? data : []
+
+    vacancies.value = Array.isArray(data)
+      ? data.filter((v) => v.active === true)
+      : []
   } catch (e) {
     console.error("Ошибка при загрузке вакансий:", e)
     error.value = "Не удалось загрузить вакансии"
@@ -185,6 +191,7 @@ async function fetchVacancies() {
     pending.value = false
   }
 }
+
 
 onMounted(async () => {
   await Promise.all([fetchFilters(), fetchVacancies()])

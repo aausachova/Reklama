@@ -19,6 +19,7 @@ import HelpPage from "@/pages/HelpPage.vue";
 import MainPage from "@/pages/MainPage.vue";
 import CuratorPage from "@/pages/CuratorPage.vue";
 import InternshipsCreatePage from "@/pages/InternshipsCreatePage.vue";
+import ModeratorPage from "@/pages/ModeratorPage.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -36,6 +37,13 @@ const routes: RouteRecordRaw[] = [
         meta: { title: "pages.database.title" },
         component: HomePage,
       },
+      {
+  path: "/vacancies/:id",
+  name: "vacancy-details",
+  meta: { title: "Вакансия" },
+  component: () => import("@/pages/VacancyDetailsPage.vue"),
+  props: true,
+  },
       {
         path: "/vacansy",
         name: "vacansy", 
@@ -55,6 +63,11 @@ const routes: RouteRecordRaw[] = [
          path:"/help", 
         name: "Help",
         component: HelpPage
+      },
+      {
+        path:"/moderator",
+        name:"moderator",
+        component: ModeratorPage
       },
       {
         path:"/candidate",

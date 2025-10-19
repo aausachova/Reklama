@@ -95,7 +95,16 @@ const RESIDENT_LINKS: Links[] = [
   { label: "Помощь", url: "/help", icon: NotepadTextIcon },
 
 ]
+const MODERATOR_LINKS: Links[] = [
+  { label: "Главная", url: "/", icon: HouseIcon },
+  { label: "Модерация", url: "/moderator", icon: Calendar },
+  { label: "Кандидаты", url: "/candidate", icon: UsersIcon },
+  { label: "Сообщения", url: "/chat", icon: MessageCircle },
+  { label: "Стажировки", url: "/internships", icon: BookIcon },
+  { label: "Вакансии", url: "/vacansy", icon: Calendar },
 
+  { label: "Помощь", url: "/help", icon: NotepadTextIcon },
+]
 const CURATOR_LINKS: Links[] = [
   { label: "Главная", url: "/curator", icon: HouseIcon },
   { label: "Стажировки", url: "/internships", icon: BookIcon },
@@ -106,7 +115,7 @@ const CURATOR_LINKS: Links[] = [
 const menuItems = computed<Links[]>(() => {
   if (isCurator.value) return CURATOR_LINKS
   if (isResident.value) return RESIDENT_LINKS
-  return [] 
+  return MODERATOR_LINKS 
 })
 </script>
 
