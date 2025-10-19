@@ -21,7 +21,7 @@ class ResumeMatchingService:
         doc = fitz.open(pdf_path)
         text = ""
         for page in doc:
-            text += page.get_text() + "\n"
+            text += page.get_text() + "\n"  # type: ignore
         doc.close()
         return text.strip()
 

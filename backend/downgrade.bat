@@ -1,1 +1,1 @@
-uv run alembic -c ./src/postgre_module/alembic.ini downgrade base
+uv run --env-file .\.env alembic downgrade base
