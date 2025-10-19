@@ -1,5 +1,5 @@
 <template>
-    <section class="px-6 py-4">
+    <section v-if="authStore.user.role !== 'moderator'" class="px-6 py-4">
         <div class="flex mb-4 items-center justify-between flex-wrap gap-3">
             <div>
                 <h1 class="text-2xl font-semibold mb-1">
@@ -110,6 +110,7 @@
             </Card>
         </div>
     </section>
+    <ModeratorPage v-else/>
 </template>
 
 <script setup lang="ts">
@@ -118,10 +119,12 @@ import { useRoute } from 'vue-router'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import AreaChart from '@/components/charts/AreaChart.vue'
+import { useAuthStore } from '@/stores/authStore'
+import ModeratorPage from './ModeratorPage.vue'
 
 const route = useRoute()
 const chartPeriod = ref<'month' | 'quarter'>('month')
-
+const authStore = useAuthStore()
 const pageTitle = 'Панель управления'
 const pageDescription = 'Единое пространство для мониторинга вакансий, кандидатов и стажировок'
 </script>

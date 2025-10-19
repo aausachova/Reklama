@@ -114,7 +114,7 @@ import { Card, CardDescription, CardHeader, CardTitle, CardContent } from '@/com
 const pageTitle = 'Модерация'
 
 const router = useRouter()
-const route = useRoute()
+
 
 const vacancies = ref<any[]>([])
 const pending = ref(false)

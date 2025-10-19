@@ -88,16 +88,15 @@ const { isCurator, isResident } = useRoles()
 const RESIDENT_LINKS: Links[] = [
   { label: "Главная", url: "/", icon: HouseIcon },
   { label: "Вакансии", url: "/vacansy", icon: Calendar },
-  { label: "Кандидаты", url: "/candidate", icon: UsersIcon },
-  { label: "Сообщения", url: "/chat", icon: MessageCircle },
   { label: "Стажировки", url: "/internships", icon: BookIcon },
 
+  { label: "Кандидаты", url: "/candidate", icon: UsersIcon },
+  { label: "Сообщения", url: "/chat", icon: MessageCircle },
   { label: "Помощь", url: "/help", icon: NotepadTextIcon },
 
 ]
 const MODERATOR_LINKS: Links[] = [
   { label: "Главная", url: "/", icon: HouseIcon },
-  { label: "Модерация", url: "/moderator", icon: Calendar },
   { label: "Кандидаты", url: "/candidate", icon: UsersIcon },
   { label: "Сообщения", url: "/chat", icon: MessageCircle },
   { label: "Стажировки", url: "/internships", icon: BookIcon },
