@@ -1,7 +1,6 @@
 <template>
     <section class="px-4">
         <div class="flex flex-col gap-4">
-            <!-- Header -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 class="text-2xl font-semibold mb-1">Аналитика проекта</h1>
@@ -65,7 +64,6 @@
                 </div>
             </div>
 
-            <!-- Stats Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Card v-for="stat in stats" :key="stat.title">
                     <CardHeader>
@@ -83,7 +81,6 @@
                 </Card>
             </div>
 
-            <!-- Charts Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <Card>
                     <CardHeader>
@@ -117,7 +114,6 @@
                 </Card>
             </div>
 
-            <!-- Table -->
             <Card>
                 <CardHeader>
                     <CardTitle>Последние участники</CardTitle>

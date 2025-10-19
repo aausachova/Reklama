@@ -1,6 +1,5 @@
 <template>
     <section class="px-6 py-4">
-        <!-- Заголовок -->
         <div class="flex mb-4 items-center justify-between flex-wrap gap-3">
             <div>
                 <h1 class="text-2xl font-semibold mb-1">

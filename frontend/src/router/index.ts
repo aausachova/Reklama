@@ -16,6 +16,9 @@ import VacansyCreatePage from "@/pages/VacansyCreatePage.vue";
 import CandidatesPage from "@/pages/CandidatesPage.vue";
 import InternshipsPage from "@/pages/InternshipsPage.vue";
 import HelpPage from "@/pages/HelpPage.vue";
+import MainPage from "@/pages/MainPage.vue";
+import CuratorPage from "@/pages/CuratorPage.vue";
+import InternshipsCreatePage from "@/pages/InternshipsCreatePage.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -42,6 +45,11 @@ const routes: RouteRecordRaw[] = [
         path:"/internships", 
         name: "internships",
         component: InternshipsPage
+      },
+      {
+         path:"/internships/create", 
+           name: "internships create ",
+             component: InternshipsCreatePage
       },
       {
          path:"/help", 
@@ -82,7 +90,6 @@ const routes: RouteRecordRaw[] = [
         name: "dashboard",
         meta: {
           title: "pages.dashboard.title",
-          //roles: ["admin"],
         },
         component: () => import("@/pages/DashboardPage.vue"),
       },
@@ -94,17 +101,18 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import("@/pages/UsersPage.vue"),
       },
-      {
-        path: "/profile",
-        name: "profile",
-        meta: { title: "pages.profile.title" },
-        component: () => import("@/pages/ProfilePage.vue"),
-      },
+   
       {
         path: "/settings",
         name: "settings",
         meta: { title: "pages.settings.title" },
         component: SettingsPage,
+      },
+      {
+          path: "/curator",
+        name: "curator",
+        meta: { title: "Главная куратора" },
+        component: CuratorPage,
       },
       {
         path: "/chat",
@@ -117,6 +125,12 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+   {
+        path:"/main",
+        name:"main",
+        component: MainPage,
+         meta: { requiresGuest: true },
+      },
   {
     path: "/auth",
     component: GuestLayout,
@@ -132,6 +146,7 @@ const routes: RouteRecordRaw[] = [
         meta: { title: "pages.login.title" },
         component: () => import("@/pages/LoginPage.vue"),
       },
+     
       {
         path: "register",
         name: "register",
@@ -140,6 +155,7 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+
   {
     path: "/403",
     name: "403",
@@ -151,6 +167,7 @@ const routes: RouteRecordRaw[] = [
       animationSrc: "/ReqectedAnimation.tgs",
     },
   },
+  
   {
     path: "/:pathMatch(.*)*",
     name: "not-found",

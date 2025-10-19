@@ -2,17 +2,15 @@
   <section class="px-4 pb-10">
     <div class="my-5 flex flex-wrap justify-between items-center gap-3">
       <h1 class="text-2xl font-semibold">Витрина вакансий</h1>
-
       <Button
         v-if="!isCurator"
         @click="goToCreate"
-        class="bg-accent text-white hover:opacity-90"
       >
-        + Создать вакансию
+        <PlusIcon/> Создать вакансию
       </Button>
     </div>
 
-    <!-- Фильтры -->
+    <!-- 🔽 Фильтры -->
     <div class="flex flex-wrap gap-3 items-center mb-6">
       <!-- Поиск -->
       <div class="flex items-center flex-grow min-w-[250px] relative">
@@ -24,7 +22,6 @@
         />
       </div>
 
-      <!-- Компания -->
       <Select v-model="selectedCompany">
         <SelectTrigger class="w-[180px]">
           <SelectValue placeholder="Компания" />
@@ -41,7 +38,6 @@
         </SelectContent>
       </Select>
 
-      <!-- Направление -->
       <Select v-model="selectedDirection">
         <SelectTrigger class="w-[180px]">
           <SelectValue placeholder="Направление" />
@@ -58,7 +54,6 @@
         </SelectContent>
       </Select>
 
-      <!-- Тип занятости -->
       <Select v-model="selectedType">
         <SelectTrigger class="w-[180px]">
           <SelectValue placeholder="Тип занятости" />
@@ -75,7 +70,6 @@
         </SelectContent>
       </Select>
 
-      <!-- Без опыта -->
       <div class="flex items-center space-x-2">
         <Checkbox id="no-exp" v-model:checked="noExperience" />
         <label
@@ -87,7 +81,6 @@
       </div>
     </div>
 
-    <!-- Список вакансий -->
     <div v-if="pending" class="text-muted-foreground text-sm">Загрузка...</div>
     <div v-else-if="error" class="text-destructive text-sm">{{ error }}</div>
 
@@ -135,16 +128,13 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardTitle } from "@/components/ui/card"
-import { Search } from "lucide-vue-next"
+import { PlusIcon, Search } from "lucide-vue-next"
 import Button from "@/components/ui/button/Button.vue"
 import { useRoles } from "@/composables/usePermissions"
 
 const { isCurator } = useRoles()
-
 const route = useRoute()
 const router = useRouter()
-
-// --- фильтры и вакансии ---
 const filters = ref({
   company: [] as string[],
   type: [] as string[],
@@ -162,17 +152,21 @@ const vacancies = ref<any[]>([])
 const pending = ref(false)
 const error = ref<string | null>(null)
 
-// --- загрузка фильтров ---
 async function fetchFilters() {
   try {
     const { data } = await axios.get("/api/vacancy/filters")
-    filters.value = data
+
+    filters.value = {
+      company: (data.company || []).filter((v: string) => v && v.trim() !== ""),
+      type: (data.type || []).filter((v: string) => v && v.trim() !== ""),
+      direction: (data.direction || []).filter((v: string) => v && v.trim() !== ""),
+      city: (data.city || []).filter((v: string) => v && v.trim() !== ""),
+    }
   } catch (e) {
     console.error("Ошибка при загрузке фильтров:", e)
   }
 }
 
-// --- загрузка вакансий ---
 async function fetchVacancies() {
   pending.value = true
   error.value = null
@@ -196,7 +190,6 @@ onMounted(async () => {
   await Promise.all([fetchFilters(), fetchVacancies()])
 })
 
-// --- фильтрация ---
 const filteredVacancies = computed(() => {
   return vacancies.value.filter((v) => {
     const matchesSearch = search.value
@@ -207,7 +200,6 @@ const filteredVacancies = computed(() => {
   })
 })
 
-// --- обновление URL и данных при смене фильтров ---
 watch(
   [selectedCompany, selectedDirection, selectedType],
   () => {

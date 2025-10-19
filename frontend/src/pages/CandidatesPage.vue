@@ -34,10 +34,8 @@ onMounted(async () => {
 
 <template>
   <section class="p-6 space-y-8">
-    <!-- 🧭 Заголовок -->
     <h1 class="text-2xl font-semibold">Витрина вакансий</h1>
 
-    <!-- 📊 Карточки статистики -->
     <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       <Card
         v-for="(item, i) in statCards"
@@ -61,7 +59,6 @@ onMounted(async () => {
       </Card>
     </div>
 
-    <!-- 📋 Таблица кандидатов -->
     <Card class="rounded-2xl">
       <CardContent>
         <div v-if="loading" class="text-muted-foreground text-sm p-4">

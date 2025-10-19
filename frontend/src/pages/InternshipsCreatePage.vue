@@ -159,6 +159,7 @@ const platformOptions = [
   "ПЕЧАТНИКИ",
   "РУДНЕВО",
 ].map((v) => ({ label: v, value: v }))
+// --- список для дропдаунов ---
 const specialtyOptions  = [
   "HR",
   "Производство",
@@ -174,6 +175,7 @@ const specialtyOptions  = [
   "Продажи",
 ].map((v) => ({ label: v, value: v }))
 
+// --- схема формы ---
 const formSchema = toTypedSchema(
   z.object({
     title: z.string().min(3, "Введите название вакансии (мин. 3 символа)"),
@@ -208,11 +210,11 @@ const animationSrc = "/DuckNothingFound.tgs"
 async function createVacancy(payload: FormValues) {
   const body = {
     title: payload.title,
-    city: payload.platform, 
+    city: payload.platform, // можно уточнить, если city отдельное поле
     company: payload.company,
-    type: "full",
+    type: "full", // можно добавить дропдаун "тип занятости" позже
     direction: payload.specialty,
-    experience: false, 
+    experience: false, // добавить чекбокс "требуется опыт"
   }
 
   const { data } = await apiClient.post("/api/vacancy/", body)

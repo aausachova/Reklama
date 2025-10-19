@@ -99,7 +99,6 @@ import { REGEX_PATTERNS } from '@/utils/validation'
 
 const { t } = useI18n()
 
-// 🔹 выбранная роль
 const selectedRole = ref<'resident' | 'curator'>('resident')
 
 const formSchema = toTypedSchema(

@@ -9,7 +9,6 @@
       'sidebar-closed': !appStore.isSidebarOpen,
     }"
   >
-    <!-- 🔹 Кнопка закрытия -->
     <div class="flex flex-col justify-center items-start h-[56px] gap-2 px-5">
       <Button
         variant="ghost"
@@ -20,7 +19,6 @@
       </Button>
     </div>
 
-    <!-- 🔹 Логотип + юзер -->
     <div class="flex flex-col gap-2 p-2">
       <img
         width="165"
@@ -36,14 +34,11 @@
       </div>
     </div>
 
-    <!-- 🔹 Основное меню -->
     <ScrollArea class="flex flex-1 flex-col gap-2 overflow-x-hidden min-h-0">
       <SidebarNav :links="menuItems" />
     </ScrollArea>
   </aside>
-  {{ isCurator }}
-  {{ isResident }}
-  <!-- 🔹 Оверлей для мобилки -->
+
   <div
     v-if="appStore.isSidebarOpen && appStore.isMobile"
     class="sidebar-overlay"
@@ -67,11 +62,8 @@ import {
   Calendar,
   MessageCircle,
   NotepadTextIcon,
-  PanelsTopLeft,
-  ChartColumn,
   PanelLeft,
   UsersIcon,
-  Building2,
 } from "lucide-vue-next"
 
 import { useAppStore } from "@/stores/appStore"
@@ -93,29 +85,28 @@ onClickOutside(sidebarRef, () => {
 
 const { isCurator, isResident } = useRoles()
 
-// 🔹 Меню для всех
-const BASE_LINKS: Links[] = [
+const RESIDENT_LINKS: Links[] = [
   { label: "Главная", url: "/", icon: HouseIcon },
+  { label: "Вакансии", url: "/vacansy", icon: Calendar },
+  { label: "Кандидаты", url: "/candidate", icon: UsersIcon },
+  { label: "Сообщения", url: "/chat", icon: MessageCircle },
+  { label: "Стажировки", url: "/internships", icon: BookIcon },
+
+  { label: "Помощь", url: "/help", icon: NotepadTextIcon },
+
+]
+
+const CURATOR_LINKS: Links[] = [
+  { label: "Главная", url: "/curator", icon: HouseIcon },
   { label: "Стажировки", url: "/internships", icon: BookIcon },
   { label: "Сообщения", url: "/chat", icon: MessageCircle },
   { label: "Помощь", url: "/help", icon: NotepadTextIcon },
 ]
 
-// 🔹 Дополнительные ссылки для резидента
-const RESIDENT_LINKS: Links[] = [
-  { label: "Вакансии", url: "/vacansy", icon: Calendar },
-  { label: "Кандидаты", url: "/candidate", icon: UsersIcon },
-  { label: "Мои стажёры", url: "/interns", icon: UsersIcon },
-  { label: "Компания", url: "/company", icon: Building2 },
-]
-
-
-
-// 🔹 Выбор ссылок в зависимости от роли
-const menuItems = computed(() => {
-  if (isCurator.value) return BASE_LINKS
-  if (isResident.value) return [...BASE_LINKS, ...RESIDENT_LINKS]
-  return BASE_LINKS // если роль не определена — просто базовые
+const menuItems = computed<Links[]>(() => {
+  if (isCurator.value) return CURATOR_LINKS
+  if (isResident.value) return RESIDENT_LINKS
+  return [] 
 })
 </script>
 

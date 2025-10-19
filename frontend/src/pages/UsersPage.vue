@@ -1,7 +1,6 @@
 <template>
     <section class="px-4">
         <div class="flex flex-col gap-4">
-            <!-- Header with Create Event Button -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h1 class="text-2xl font-semibold mb-1">Аналитика участников</h1>

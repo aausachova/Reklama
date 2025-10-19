@@ -4,27 +4,26 @@
       <h1 class="text-2xl font-semibold">Стажировки</h1>
 
       <Button
-        v-if="!isCurator"
+      
         @click="goToCreate"
-        class="bg-accent text-white hover:opacity-90"
+     
       >
-       Связаться с куратором
-      </Button>
+      
+  {{ isCurator ? 'Связаться с резидентом' : 'Связаться с куратором' }}      </Button>
     </div>
 
     <!-- 🔽 Фильтры -->
     <div class="flex flex-wrap gap-3 items-center mb-6">
-      <!-- Поиск по ВУЗу -->
+      <!-- Поиск по программе -->
       <div class="flex items-center flex-grow min-w-[250px] relative">
         <Search class="absolute left-3 text-muted-foreground w-4 h-4" />
         <Input
           v-model="search"
-          placeholder="Поиск по ВУЗу"
+          placeholder="Поиск по программе"
           class="pl-9 w-full"
         />
       </div>
 
-      <!-- Направление -->
       <Select v-model="selectedDirection">
         <SelectTrigger class="w-[180px]">
           <SelectValue placeholder="Направление" />
@@ -41,7 +40,6 @@
         </SelectContent>
       </Select>
 
-      <!-- Курс -->
       <Select v-model="selectedCourse">
         <SelectTrigger class="w-[180px]">
           <SelectValue placeholder="Курс" />
@@ -58,7 +56,6 @@
         </SelectContent>
       </Select>
 
-      <!-- 🗓 Период -->
       <Select v-model="selectedPeriod">
         <SelectTrigger class="w-[180px]">
           <SelectValue placeholder="Период" />
@@ -75,7 +72,6 @@
         </SelectContent>
       </Select>
 
-      <!-- Бронь от компании -->
       <div class="flex items-center space-x-2">
         <Checkbox id="reserved" v-model:checked="isReserved" />
         <label
@@ -87,7 +83,6 @@
       </div>
     </div>
 
-    <!-- 🧭 Таблица стажировок -->
     <div v-if="pending" class="text-muted-foreground text-sm">Загрузка...</div>
     <div v-else-if="error" class="text-destructive text-sm">{{ error }}</div>
 
@@ -95,41 +90,24 @@
       <table class="min-w-full text-sm border-collapse">
         <thead class="bg-muted/50 text-left">
           <tr>
-            <th class="px-4 py-3 font-semibold text-foreground whitespace-nowrap">ВУЗ</th>
-            <th class="px-4 py-3 font-semibold text-foreground w-[35%]">Направление обучения, курс</th>
-            <th class="px-4 py-3 font-semibold text-foreground whitespace-nowrap">Дата прохождения практики</th>
-            <th class="px-4 py-3 font-semibold text-foreground whitespace-nowrap">Количество человек</th>
-            <th class="px-4 py-3 font-semibold text-foreground whitespace-nowrap">Бронь компании</th>
+            <th class="px-4 py-3 font-semibold text-foreground">Программа обучения</th>
+            <th class="px-4 py-3 font-semibold text-foreground whitespace-nowrap">Дата начала</th>
+            <th class="px-4 py-3 font-semibold text-foreground whitespace-nowrap">Дата окончания</th>
+            <th class="px-4 py-3 font-semibold text-foreground whitespace-nowrap text-center">Кол-во студентов</th>
           </tr>
         </thead>
 
         <tbody>
           <tr
             v-for="intern in filteredInterns"
-            :key="intern.id"
+            :key="intern.study_program"
             class="border-t hover:bg-muted/30 transition"
           >
-            <td class="px-4 py-3">{{ intern.university }}</td>
-            <td class="px-4 py-3">
-              <span class="font-medium">{{ intern.direction }}</span>,
-              <span class="text-muted-foreground">{{ intern.course }}</span>
-            </td>
-            <td class="px-4 py-3">{{ intern.period }}</td>
-            <td class="px-4 py-3 text-center">{{ intern.count }}</td>
-            <td class="px-4 py-3">
-              <span
-                v-if="intern.reserved"
-                class="bg-green-600 text-white text-xs px-3 py-1 rounded-full"
-              >
-                Да
-              </span>
-              <span
-                v-else
-                class="bg-muted text-foreground text-xs px-3 py-1 rounded-full"
-              >
-                Нет
-              </span>
-            </td>
+            <td class="px-4 py-3">{{ intern.study_program }}</td>
+            <td class="px-4 py-3 whitespace-nowrap">{{ formatDate(intern.start_date) }}</td>
+            <td class="px-4 py-3 whitespace-nowrap">{{ formatDate(intern.end_date) }}</td>
+            <td class="px-4 py-3 text-center">{{ intern.students_count }}</td>
+           
           </tr>
         </tbody>
       </table>
@@ -142,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue"
+import { ref, computed, watch, onMounted } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
@@ -151,19 +129,18 @@ import { Search } from "lucide-vue-next"
 import Button from "@/components/ui/button/Button.vue"
 import { useRoles } from "@/composables/usePermissions"
 
-const { isCurator } = useRoles()
+import axios from "axios"
 
+const { isCurator } = useRoles()
 const route = useRoute()
 const router = useRouter()
 
-// --- 🔧 Моковые фильтры ---
 const filters = ref({
-  direction: ["IT", "Медицина", "Финансы", "Маркетинг", "Юриспруденция"],
-  course: ["1 курс", "2 курс", "3 курс", "4 курс", "5 курс"],
-  period: ["Весна 2024", "Лето 2024", "Осень 2024", "Зима 2025"],
+  direction: ["IT", "Медицина", "Финансы"],
+  course: ["1 курс", "2 курс", "3 курс", "4 курс"],
+  period: ["Весна", "Лето", "Осень", "Зима"],
 })
 
-// --- ⚙️ Параметры фильтрации ---
 const search = ref(route.query.search?.toString() || "")
 const selectedDirection = ref(route.query.direction?.toString() || "all")
 const selectedCourse = ref(route.query.course?.toString() || "all")
@@ -172,62 +149,39 @@ const isReserved = ref(route.query.reserved === "true")
 
 const pending = ref(false)
 const error = ref<string | null>(null)
+const interns = ref<any[]>([])
 
-// --- 🧑‍🎓 Моковые данные стажировок ---
-const interns = ref([
-  {
-    id: 1,
-    university: "МИЭТ",
-    direction: "IT",
-    course: "3 курс",
-    period: "Лето 2024",
-    count: 12,
-    reserved: true,
-  },
-  {
-    id: 2,
-    university: "МГУ",
-    direction: "Финансы",
-    course: "4 курс",
-    period: "Осень 2024",
-    count: 8,
-    reserved: false,
-  },
-  {
-    id: 3,
-    university: "МГТУ",
-    direction: "Медицина",
-    course: "2 курс",
-    period: "Весна 2024",
-    count: 5,
-    reserved: true,
-  },
-])
+onMounted(async () => {
+  try {
+    pending.value = true
+    const res = await axios.get("/api/intern")
+    interns.value = res.data
+  } catch (err: any) {
+    error.value = "Ошибка при загрузке данных"
+  } finally {
+    pending.value = false
+  }
+})
 
-// --- 🧮 Фильтрация ---
 const filteredInterns = computed(() => {
   return interns.value.filter((i) => {
     const matchesSearch = search.value
-      ? i.university.toLowerCase().includes(search.value.toLowerCase())
+      ? i.study_program.toLowerCase().includes(search.value.toLowerCase())
       : true
-    const matchesDirection =
-      selectedDirection.value === "all" || i.direction === selectedDirection.value
-    const matchesCourse =
-      selectedCourse.value === "all" || i.course === selectedCourse.value
-    const matchesPeriod =
-      selectedPeriod.value === "all" || i.period === selectedPeriod.value
-    const matchesReserved = isReserved.value ? i.reserved : true
-    return (
-      matchesSearch &&
-      matchesDirection &&
-      matchesCourse &&
-      matchesPeriod &&
-      matchesReserved
-    )
+    const matchesReserved = isReserved.value ? i.company_reserved : true
+    return matchesSearch && matchesReserved
   })
 })
 
-// --- Обновление query параметров ---
+const formatDate = (dateStr: string) => {
+  const date = new Date(dateStr)
+  return date.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+}
+
 watch([search, selectedDirection, selectedCourse, selectedPeriod, isReserved], () => {
   router.replace({
     query: {
@@ -240,6 +194,7 @@ watch([search, selectedDirection, selectedCourse, selectedPeriod, isReserved], (
   })
 })
 
-// --- Навигация ---
-const goToCreate = () => router.push("/chat")
+const goToCreate = () => {
+    router.push("/chat")
+}
 </script>

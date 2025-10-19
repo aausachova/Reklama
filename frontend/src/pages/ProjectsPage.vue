@@ -3,7 +3,6 @@
         <div class="w-full max-w-[700px] mx-auto flex flex-col space-y-4">
             <h1 class="text-2xl font-bold">Добавление позиции</h1>
 
-            <!-- Вкладки -->
             <div class="flex border-b border-muted/50 mb-4">
                 <button
                     :class="['px-4 py-2 font-semibold', activeTab === 'vacancy' ? 'border-b-2 border-primary text-primary' : 'text-muted-foreground']"
@@ -17,7 +16,6 @@
                 </button>
             </div>
 
-            <!-- Контент вкладок -->
             <div v-if="activeTab === 'vacancy'">
                 <form @submit.prevent="onSubmitVacancy" class="space-y-4">
                     <FormField v-slot="{ componentField }" name="title">
