@@ -19,7 +19,7 @@ class CandidateResponse(BaseModel):
     direction: str
     phone: str
     email: EmailStr
-    status: str
+    status: str | None
 
     class Config:
         orm_mode = True

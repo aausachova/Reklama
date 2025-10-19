@@ -28,11 +28,16 @@ class VacancyService():
             return VacancyResponse.model_validate(updated_vacancy, from_attributes=True)
         return None
 
-    async def delete_vacancy(self, vacancy_id: UUID) -> None:
+    async def delete_vacancy(self, vacancy_id: UUID) -> bool:
         vacancy = await self.vacancy_repository.get_by_id(vacancy_id)
-        if vacancy:
+        if vacancy is not None:
             await self.vacancy_repository.delete(vacancy)
-        return None
+            return True
+        return False
 
     async def get_filters(self) -> dict[str, list[str]]:
         return await self.vacancy_repository.get_filters()
+
+    async def get_inactive_vacancies(self) -> list[VacancyResponse]:
+        vacancies = await self.vacancy_repository.get_inactive()
+        return [VacancyResponse.model_validate(v, from_attributes=True) for v in vacancies]

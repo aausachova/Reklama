@@ -16,6 +16,7 @@ async def create_roles():
         to_create: list[Coroutine[Any, Any, Any]] = []
         to_create.append(role_repository.create("resident", False))
         to_create.append(role_repository.create("curator", False))
+        to_create.append(role_repository.create("moderator", False))
 
         await asyncio.gather(*to_create)
 

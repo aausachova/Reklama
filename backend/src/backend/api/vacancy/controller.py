@@ -47,3 +47,7 @@ class VacancyController(Controller):
     @get("/filters", response_model=VacancyFiltersResponse)
     async def get_filters(self):
         return await self.vacancy_service.get_filters()
+
+    @get("/inactive", response_model=list[VacancyResponse])
+    async def get_inactive_vacancies(self):
+        return await self.vacancy_service.get_inactive_vacancies()

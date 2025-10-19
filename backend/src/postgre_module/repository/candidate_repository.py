@@ -21,7 +21,7 @@ class CandidateRepository():
     async def get_all(self) -> list[Candidate]:
         stmt = select(Candidate)
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        return result.scalars().all()   # type: ignore
 
     async def update_status(self, id: UUID, status: str) -> Candidate | None:
         candidate = await self.get_by_id(id)

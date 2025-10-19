@@ -37,7 +37,12 @@ class VacancyRepository():
             stmt = stmt.where(func.lower(Vacancy.type) == type.lower())
 
         result = await self.session.execute(stmt)
-        return result.scalars().all()
+        return result.scalars().all()   # type: ignore
+
+    async def get_inactive(self) -> list[Vacancy]:
+        stmt = select(Vacancy).where((Vacancy.active == False) | (Vacancy.active == None))  # type: ignore
+        result = await self.session.execute(stmt)
+        return result.scalars().all()   # type: ignore
 
     async def update(self, vacancy: Vacancy, data: dict) -> Vacancy:
         for key, value in data.items():

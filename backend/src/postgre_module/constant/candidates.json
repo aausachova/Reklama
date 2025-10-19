@@ -1,0 +1,62 @@
+[
+  {
+    "full_name": "Иван Петров",
+    "direction": "Backend-разработка",
+    "phone": "+79998887766",
+    "email": "ivan.petrov@example.com"
+  },
+  {
+    "full_name": "Анна Смирнова",
+    "direction": "Frontend-разработка",
+    "phone": "+79991112233",
+    "email": "anna.smirnova@example.com"
+  },
+  {
+    "full_name": "Дмитрий Соколов",
+    "direction": "Data Science",
+    "phone": "+79995556677",
+    "email": "dmitry.sokolov@example.com"
+  },
+  {
+    "full_name": "Екатерина Орлова",
+    "direction": "UI/UX-дизайн",
+    "phone": "+79997778855",
+    "email": "ekaterina.orlova@example.com"
+  },
+  {
+    "full_name": "Сергей Кузнецов",
+    "direction": "DevOps",
+    "phone": "+79990001122",
+    "email": "sergey.kuznetsov@example.com"
+  },
+  {
+    "full_name": "Мария Белова",
+    "direction": "Аналитика данных",
+    "phone": "+79992223344",
+    "email": "maria.belova@example.com"
+  },
+  {
+    "full_name": "Алексей Егоров",
+    "direction": "Мобильная разработка (Android)",
+    "phone": "+79993334455",
+    "email": "alexey.egorov@example.com"
+  },
+  {
+    "full_name": "Ольга Никитина",
+    "direction": "Мобильная разработка (iOS)",
+    "phone": "+79994445566",
+    "email": "olga.nikitina@example.com"
+  },
+  {
+    "full_name": "Николай Воробьев",
+    "direction": "Machine Learning",
+    "phone": "+79995556677",
+    "email": "nikolay.vorobyev@example.com"
+  },
+  {
+    "full_name": "Татьяна Кузьмина",
+    "direction": "Тестирование и QA",
+    "phone": "+79996667788",
+    "email": "tatyana.kuzmina@example.com"
+  }
+]
