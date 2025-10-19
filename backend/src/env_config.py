@@ -16,6 +16,7 @@ class RedisConfig(LocalSettings):
     def url(self) -> str:
         return f"redis://{self.user}:{self.password}@{self.host}:{self.port}"
 
+
 class ModelConfig(LocalSettings):
     BASE_URL: str = Field(default="https://api.openai.com/v1", alias="OPENAI_BASE_URL")
     PROVIDER: str = Field(default="openai", alias="OPENAI_PROVIDER")

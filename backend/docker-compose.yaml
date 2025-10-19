@@ -21,10 +21,26 @@ services:
   redis:
     image: redis:latest
     restart: always
+    environment:
+      REDIS_USER: ${REDIS_USER:-default}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-default}
     volumes:
-      - ./.local/.redis_data:/data
+      - ./.local/.redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "26379:6379"
 
 #  test_service:
 #    build: .
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
+#      redis:
+#        condition: service_healthy
+#    volumes:
+#      - ./.local:/.local
+#      - ./.local:/alembic/versions

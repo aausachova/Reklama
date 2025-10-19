@@ -4,7 +4,7 @@ from .vacancies import create_vacancies
 
 
 async def init_constants():
-    # await create_roles()
+    await create_roles()
     await create_vacancies()
 
 if __name__ == "__main__":

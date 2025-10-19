@@ -31,13 +31,11 @@ app = FastAPI(
     version="0.1",
     middleware=[
         Middleware(CORSMiddleware,
-                   allow_origins=[
-                       "localhost:8000", "26.222.166.167:8000", "26.222.166.167", "localhost"],
+                   allow_origins=["*"],
                    allow_methods=["*"],
                    allow_headers=["*"],
                    allow_credentials=True)
     ],
     lifespan=lifespan
 )
-
 app.include_router(router)
