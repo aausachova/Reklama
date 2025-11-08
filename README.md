@@ -1,4 +1,4 @@
-# Цифровая HR платформа
+# HR Management System
 
 Production-ready FastAPI backend with PostgreSQL, Redis, and Alembic migrations. With uv for fast Python env/package management and Docker Compose.
 
